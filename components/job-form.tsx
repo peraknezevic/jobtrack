@@ -45,8 +45,6 @@ const JobForm = () => {
       status: "PENDING",
       mode: "FULLTIME",
       notes: "",
-      dateApplied: new Date(),
-      dateResponse: new Date(),
     },
   })
 

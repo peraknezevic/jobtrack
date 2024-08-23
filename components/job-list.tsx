@@ -1,5 +1,6 @@
 "use client"
 
+import JobListItem from "./job-list-item"
 import { jobFormSchema } from "@/lib/schema"
 import { useLocalStorage } from "usehooks-ts"
 import { z } from "zod"
@@ -13,7 +14,7 @@ const JobList = () => {
     <div>
       <h1>Job List</h1>
       {jobs.map((job) => (
-        <p key={job.position}>{job.position}</p>
+        <JobListItem key={job.position} job={job} />
       ))}
     </div>
   )

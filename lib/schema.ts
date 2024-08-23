@@ -14,5 +14,5 @@ export const jobFormSchema = z.object({
   mode: z.enum(["FULLTIME", "PARTTIME", "INTERNSHIP"]),
   notes: z.string().min(2).max(200),
   dateApplied: z.date(),
-  dateResponse: z.date(),
+  dateResponse: z.date().optional(),
 })
