@@ -52,7 +52,6 @@ const jobFormSchema = z.object({
 })
 
 const JobForm = () => {
-  // 1. Define your form.
   const form = useForm<z.infer<typeof jobFormSchema>>({
     resolver: zodResolver(jobFormSchema),
     defaultValues: {
@@ -71,12 +70,8 @@ const JobForm = () => {
     z.infer<typeof jobFormSchema>[]
   >("jobtrack-jobs", [])
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof jobFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values)
-
     setValue([...value, values])
   }
 
