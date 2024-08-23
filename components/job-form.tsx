@@ -1,6 +1,5 @@
 "use client"
 
-import { Calendar as CalendarIcon, Link } from "lucide-react"
 import {
   Form,
   FormControl,
@@ -25,26 +24,31 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
+import { Calendar as CalendarIcon } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
-import { toast } from "@/components/ui/use-toast"
 import { useForm } from "react-hook-form"
+import { useLocalStorage } from "usehooks-ts"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 const jobFormSchema = z.object({
   position: z.string().min(2).max(50),
   company: z.string().min(2).max(50),
-  location: z.string().min(2).max(50).optional(),
-  status: z
-    .enum(["PENDING", "INTERVIEW", "DECLINED", "REJECTED", "NORESPONSE"])
-    .optional(),
-  mode: z.enum(["FULLTIME", "PARTTIME", "INTERNSHIP"]).optional(),
-  notes: z.string().min(2).max(200).optional(),
-  dateApplied: z.date().optional(),
-  dateResponse: z.date().optional().optional(),
+  location: z.string().min(2).max(50),
+  status: z.enum([
+    "PENDING",
+    "INTERVIEW",
+    "DECLINED",
+    "REJECTED",
+    "NORESPONSE",
+  ]),
+  mode: z.enum(["FULLTIME", "PARTTIME", "INTERNSHIP"]),
+  notes: z.string().min(2).max(200),
+  dateApplied: z.date(),
+  dateResponse: z.date(),
 })
 
 const JobForm = () => {
@@ -63,11 +67,17 @@ const JobForm = () => {
     },
   })
 
+  const [value, setValue, removeValue] = useLocalStorage<
+    z.infer<typeof jobFormSchema>[]
+  >("jobtrack-jobs", [])
+
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof jobFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
+
+    setValue([...value, values])
   }
 
   return (
