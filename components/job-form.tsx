@@ -29,27 +29,11 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
+import { jobFormSchema } from "@/lib/schema"
 import { useForm } from "react-hook-form"
 import { useLocalStorage } from "usehooks-ts"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-
-const jobFormSchema = z.object({
-  position: z.string().min(2).max(50),
-  company: z.string().min(2).max(50),
-  location: z.string().min(2).max(50),
-  status: z.enum([
-    "PENDING",
-    "INTERVIEW",
-    "DECLINED",
-    "REJECTED",
-    "NORESPONSE",
-  ]),
-  mode: z.enum(["FULLTIME", "PARTTIME", "INTERNSHIP"]),
-  notes: z.string().min(2).max(200),
-  dateApplied: z.date(),
-  dateResponse: z.date(),
-})
 
 const JobForm = () => {
   const form = useForm<z.infer<typeof jobFormSchema>>({
@@ -66,17 +50,17 @@ const JobForm = () => {
     },
   })
 
-  const [value, setValue, removeValue] = useLocalStorage<
+  const [jobs, setJob, removeJob] = useLocalStorage<
     z.infer<typeof jobFormSchema>[]
   >("jobtrack-jobs", [])
 
-  function onSubmit(values: z.infer<typeof jobFormSchema>) {
-    console.log(values)
-    setValue([...value, values])
+  function onSubmit(job: z.infer<typeof jobFormSchema>) {
+    console.log(job)
+    setJob([...jobs, job])
   }
 
   return (
-    <>
+    <div>
       <h2>Add Job</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -297,7 +281,7 @@ const JobForm = () => {
           <Button type="submit">Create Job</Button>
         </form>
       </Form>
-    </>
+    </div>
   )
 }
 
